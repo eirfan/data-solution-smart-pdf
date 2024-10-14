@@ -7,7 +7,12 @@
         width:35%;
         color:grey
     }
-    .drop-zone-div:hover {
+    .drop-zone-div:hover  {
+        cursor:pointer;
+        color:blue;
+        border-color:blue;
+    }
+    .drop-zone-div.dragover {
         cursor:pointer;
         color:blue;
         border-color:blue;
@@ -41,30 +46,63 @@
 <script type="text/javascript">
     let fileInput = document.getElementById("fileInput");
     let button = document.getElementById("fileSubmitButton");
+    let dropZone = document.getElementById("drop_zone");
+
+
     const ALLOWED_FORMAT = ["text/plain","application/pdf"]
     fileInput.addEventListener('change',function(event) {
-        if(event.target.files.length != 1) {
-            alert("Please upload only 1 file");
-            fileInput.value = "";
+        if(!checkFileFormat(event.target.files)) {
             return 1;
         }
-        const file = event.target.files[0];
-        if(file == null) {
-            alert("Please select valid file")
-            return 1;
-        }
-        if(!ALLOWED_FORMAT.includes(file.type)) {
-            alert("Invalid format");
-            fileInput.value = "";
-            return 1;
-        }
-
         button.click();
     })
+    dropZone.addEventListener("dragover",(event) => {
+        event.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener("dragleave",(event) => {
+        event.preventDefault();
+        dropZone.classList.remove("dragover");
+    });
+    dropZone.addEventListener("drop",(event) => {
+        event.preventDefault();
+        dropZone.classList.remove("dragover");
+        
+        if(!checkFileFormat(event.dataTransfer.files)) {
+            return 1;
+        }
+        let file = event.dataTransfer.files[0];
+        let dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
+        button.click();
+    });
+
+
+
     function chooseFile() {
         if(fileInput != null) {
             fileInput.click();
         }
     }
+    function checkFileFormat(files) {
+        if(files.length != 1) {
+            alert("Please upload only 1 file");
+            fileInput.value = "";
+            return false;
+        }
+        const file = files[0];
+        if(file == null) {
+            alert("Please select valid file")
+            return false;
+        }
+        if(!ALLOWED_FORMAT.includes(file.type)) {
+            alert("Invalid format");
+            fileInput.value = "";
+            return false;
+        }
+        return true;
+    }
+  
 </script>
 @endsection

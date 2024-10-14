@@ -24,7 +24,8 @@ class FileController extends Controller
                 throw new Exception($validator->errors());
             }
             $file = $request->file("fileInput");
-            $content = $this->fileService->extractFileContent($file->getPathname());
+            // $this->fileService->uploadFile($file);
+            $content = $this->fileService->extractFileContent($file);
             return view("documents\content\index",["content" => $content]);
             
         }catch(Exception $exception) {
