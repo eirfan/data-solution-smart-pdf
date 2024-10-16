@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Classes\PdfParser;
 use App\Interfaces\FileServiceInterface;
 use App\Models\File;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class FileService implements FileServiceInterface {
@@ -27,12 +28,24 @@ class FileService implements FileServiceInterface {
                 $parser = new PdfParser();
                 $content =  $parser->parseContent($file->getPathname());
                 $text = $content->getText();
+                break;
 
             case "txt":
                 $text = file_get_contents($file->getRealPath());
+                break;
 
         }
-      
         return $text;
+    }
+
+    public function getUploadedFile(): Collection {
+        $query = File::select(
+            "url",
+            "name",
+            "created_at",
+            "id",
+        )->orderByDesc("created_at");
+        $file = $query->get();
+        return $file;
     }
 }

@@ -15,15 +15,20 @@
         <style>
             body {
                 font-family: 'Nunito', sans-serif;
+                background-color:#f5f7fa;
             }
         </style>
         @yield("custom-style")
     </head>
     <body class="antialiased" style="height:100vh;width:100vw">
+        @include("commons.alert")
         @yield("content")
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
+        <script>
+            let alert
+        </script>
         @yield("custom-script")
     </body>
 </html>

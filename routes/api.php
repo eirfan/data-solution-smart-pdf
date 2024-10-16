@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ChatGPTController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+## BOC : for temporary, need to put this url inside the middleware guard
+Route::prefix("chatgpt")->group(function() {
+    Route::post("ask",[ChatGPTController::class,"askQuestion"]);
+});
+## EOC
